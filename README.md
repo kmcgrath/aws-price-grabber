@@ -11,7 +11,7 @@ Based on this Stack Overflow [answer](http://stackoverflow.com/a/7334197)
     var frugal = require('frugal-ec2');
     var f = frugal.requestPricing;
 
-    f.on('pricesheet',doSomething);
+    f.on('pricemap:received',doSomething);
     f.on('end',finishSomething);
 
 ## request\_all.js
