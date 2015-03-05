@@ -4,6 +4,9 @@ Staus: ~~Alpha~~ Hacky
 
 Based on this Stack Overflow [answer](http://stackoverflow.com/a/7334197)
 
+* Appears to also work for [S3](http://aws.amazon.com/s3/pricing/)
+  * Already need to change the project name to frugal-aws?
+
 ## Use
     var frugal = require('frugal-ec2');
     var f = frugal.requestPricing;
