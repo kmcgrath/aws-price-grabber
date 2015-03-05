@@ -41,9 +41,16 @@ Frugal.prototype.requestPricing = function(options) {
             function(foundModel,jsonpDone) {
               var m = foundModel.match(/'(\S+)'/);
               var parts = m[1].split("/");
+              console.log(parts);
               var file = parts[parts.length-1];
-              var name = file.split('.')[0];
+              var productName = file.split('.')[0];
               var jsonpUrl = 'http:' + m[1];
+
+              // TODO break out into function
+              var serviceName = parts[5];
+              if (productName === "spot") {
+                serviceName = 'ec2';
+              }
 
               var body = '';
               var jsonpReq = http.get(jsonpUrl, function (jsonpRes) {
@@ -52,9 +59,10 @@ Frugal.prototype.requestPricing = function(options) {
                 });
                 jsonpRes.on('end', function() {
                   var json = vm.runInContext(body,self.jsonpSandbox);
-                  self.emit('pricesheet',{
-                    name: name,
-                    sheet: json
+                  self.emit('pricemap:received',{
+                    serviceName: serviceName,
+                    productName: productName,
+                    priceMap: json
                   });
                   jsonpDone();
                 });
