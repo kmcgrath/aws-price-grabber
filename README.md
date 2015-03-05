@@ -2,7 +2,7 @@ Promatically capture all AWS compute pricing
 
 Staus: ~~Alpha~~ Hacky
 
-Based on this StackOverflow [answer](http://stackoverflow.com/a/7334197)
+Based on this Stack Overflow [answer](http://stackoverflow.com/a/7334197)
 
 More, possibily more useful projects:
 
