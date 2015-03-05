@@ -5,11 +5,11 @@ Staus: ~~Alpha~~ Hacky
 Based on this Stack Overflow [answer](http://stackoverflow.com/a/7334197)
 
 ## Use
-var frugal = require('frugal-ec2');
-var f = frugal.requestPricing;
+    var frugal = require('frugal-ec2');
+    var f = frugal.requestPricing;
 
-f.on('pricesheet',doSomething);
-f.on('end',finishSomething);
+    f.on('pricesheet',doSomething);
+    f.on('end',finishSomething);
 
 ## request\_all.js
 Script that dumps all pricing in JSON to STDOUT
