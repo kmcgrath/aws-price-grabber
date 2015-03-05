@@ -41,7 +41,6 @@ Frugal.prototype.requestPricing = function(options) {
             function(foundModel,jsonpDone) {
               var m = foundModel.match(/'(\S+)'/);
               var parts = m[1].split("/");
-              console.log(parts);
               var file = parts[parts.length-1];
               var productName = file.split('.')[0];
               var jsonpUrl = 'http:' + m[1];
