@@ -1,13 +1,16 @@
-var aws = require('aws-sdk'),
-http = require('http'),
+var _ = require('lodash'),
+EventEmitter = require('events').EventEmitter,
 async = require('async'),
-vm = require('vm'),
-EventEmitter = require('events').EventEmitter;
-util = require('util');
+aws = require('aws-sdk'),
+http = require('http'),
+util = require('util'),
+vm = require('vm');
 
-var EC2_PRICING_URL = exports.EC2_PRICING_URL = 'http://aws.amazon.com/ec2/pricing/';
-var S3_PRICING_URL = exports.S3_PRICING_URL = 'http://aws.amazon.com/s3/pricing/';
-var ALL_URLS = [EC2_PRICING_URL,S3_PRICING_URL];
+var services = {
+  s3: require('./lib/services/s3'),
+  rds: require('./lib/services/rds'),
+  ec2: require('./lib/services/ec2')
+};
 
 exports.requestPricing = function(options) {
   return new Frugal(options);
@@ -24,7 +27,7 @@ Frugal.prototype.requestPricing = function(options) {
   var self = this;
 
   async.each(
-    ALL_URLS,
+    _.pluck(services,'PRICING_URL'),
     function(pricingUrl, serviceDone) {
       http.get(pricingUrl, function (res) {
         var processModels = [];
