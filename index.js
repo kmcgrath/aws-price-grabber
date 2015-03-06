@@ -9,7 +9,8 @@ vm = require('vm');
 var services = {
   s3: require('./lib/services/s3'),
   rds: require('./lib/services/rds'),
-  ec2: require('./lib/services/ec2')
+  ec2: require('./lib/services/ec2'),
+  elasticache: require('./lib/services/elasticache')
 };
 
 exports.requestPricing = function(options) {
