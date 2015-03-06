@@ -27,32 +27,28 @@ Frugal.prototype.requestPricing = function(options) {
   var self = this;
 
   async.each(
-    _.pluck(services,'PRICING_URL'),
-    function(pricingUrl, serviceDone) {
-      http.get(pricingUrl, function (res) {
-        var processModels = [];
+    options.services || _.keys(services),
+    function(serviceName, serviceDone) {
+      var data;
+      http.get(services[serviceName].PRICING_URL, function (res) {
+        var pricingHtml;
         res.on('data', function (chunk) {
           var findModels;
-          // model: '//a0.awsstatic.com/pricing/1/ec2/linux-od.min.js'
-          if (findModels = chunk.toString().match(/model:\s'\S+'/g)) {
-            processModels = processModels.concat(findModels);
-          }
+          pricingHtml = pricingHtml + chunk.toString();
+        });
+        res.on('err', function (err) {
+          //TODO
         });
         res.on('end',function(){
+          // model: '//a0.awsstatic.com/pricing/1/ec2/linux-od.min.js'
+          var processModels = pricingHtml.match(/model:\s'\S+'/g);
+
           async.each(
             processModels,
             function(foundModel,jsonpDone) {
-              var m = foundModel.match(/'(\S+)'/);
-              var parts = m[1].split("/");
-              var file = parts[parts.length-1];
-              var productName = file.split('.')[0];
-              var jsonpUrl = 'http:' + m[1];
-
-              // TODO break out into function
-              var serviceName = parts[5];
-              if (productName === "spot") {
-                serviceName = 'ec2';
-              }
+              var m = foundModel.match(/'(\S+)'/)[1];
+              var productName = ''; //services[serviceName].getProductName(m);
+              var jsonpUrl = services[serviceName].getJsonpUrl(m);
 
               var body = '';
               var jsonpReq = http.get(jsonpUrl, function (jsonpRes) {
