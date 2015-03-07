@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-var frugal = require('../');
+var awsPriceGrabber = require('../');
 
 var count = 0;
 
-var f = frugal.requestPricing();
+var f = awsPriceGrabber.requestPricing();
 f.on('pricemap:received',function(a){
   count = count + 1;
 });
