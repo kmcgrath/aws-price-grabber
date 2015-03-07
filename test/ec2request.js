@@ -7,6 +7,7 @@ describe('ec2 Request', function(){
       this.timeout(15000);
       var f = frugal.requestPricing({services:['ec2']});
       f.on('pricemap:received',function(pricemap) {
+        // console.log(JSON.stringify(pricemap,null,2));
         assert.equal(pricemap.serviceName, 'ec2');
       });
       f.on('end',done);

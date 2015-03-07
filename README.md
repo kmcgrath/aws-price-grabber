@@ -1,28 +1,63 @@
-Capture all AWS compute pricing
+# aws-price-grabber
+Capture AWS pricing as JSON
 
-Based on this Stack Overflow [answer](http://stackoverflow.com/a/7334197)
+Based on a Stack Overflow [answer](http://stackoverflow.com/a/7334197)
 
-Staus: ~~Alpha~~ Hacky
+*Staus*: ~~Alpha~~ Hacky
 
 *WARNING*
-There is a lot of work to be done.  Things could be broken, changed and
-disapear at any moment.
+There is a lot of work to be done.  There are unicorns, gremlins and
+constant change.
+
+## Description
+AWS does not have an API for pricing.  Most of the pricing pages however
+load their data via jsonp.  Those jsonp endpoints can and do change.
+This project will scan a pricing page for the jsonp endpoints it relies
+on then process those endpoints into JSON.
+
+For each endpoint (pricemap) *aws-price-grabber* will emit an event
+allowing the consuerm to parse or store the raw data as they see fit.
+
+Since AWS does not support pulling prices this way, *aws-price_grabber*
+will not attempt to manipulate, normalize, or change data in any way.
+That will be the job of the consming application/module.  This will
+hopefully keep any breaking changes made by AWS to a minimum.
 
 
-The solution is working for more than ec2.  Might be able to use this
-method to get pricing for any AWS product.
-* Might change the name of the project to frugal-aws
-
-Services that appear to be working so far:
+## Services that work
 * ec2
-* rds
+* elasticloadbalancing
 * s3
+* glacier
+* ebs
+* storagegateway
+* rds
 * elasticache
-* sns
+* dynamodb
+* redshift
 * sqs
+* sns
+* swf
+* cloudsearch
+* elastictranscoder
+* elasticmapreduce
+* kinesis
+
+## Services that DO NOT work
+
+The following services embed pricing as HTML and do not use jsonp.
+
+* ses
+* directconnect
+* vpc
+* lambda
+* cloudfront
+* route53
+* appstream
 
 
 ## Use
+
     var frugal = require('frugal-ec2');
     var f = frugal.requestPricing;
 
@@ -37,6 +72,12 @@ most likely move these to examples or better yet, tests in the future.
 Script that dumps all pricing in JSON to STDOUT
 
     > ./bin/request_all.js
+
+### count\_price\_endpoints.js
+Counts the total number of jsonp endpoints that can be collected
+
+    > ./bin/count_price_endpoints.js
+
 
 
 ## Other useful ec2 pricing projects
