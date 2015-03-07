@@ -59,10 +59,10 @@ The following services embed pricing as HTML and do not use jsonp.
 ## Use
 
     var awsPriceGrabber = require('awsPriceGrabber-ec2');
-    var f = awsPriceGrabber.requestPricing;
+    var grabber = awsPriceGrabber.requestPricing;
 
-    f.on('pricemap:received',doSomething);
-    f.on('end',finishSomething);
+    grabber.on('pricemap:received',doSomething);
+    grabber.on('end',finishSomething);
 
 ## Scripts
 Right now I'm placing some quick scripts in the bin directory.  Will
