@@ -58,8 +58,8 @@ The following services embed pricing as HTML and do not use jsonp.
 
 ## Use
 
-    var frugal = require('frugal-ec2');
-    var f = frugal.requestPricing;
+    var awsPriceGrabber = require('awsPriceGrabber-ec2');
+    var f = awsPriceGrabber.requestPricing;
 
     f.on('pricemap:received',doSomething);
     f.on('end',finishSomething);
