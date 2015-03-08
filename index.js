@@ -31,6 +31,7 @@ var SERVICE_LIST = [
   'cloudsearch',
   'elastictranscoder',
 
+  /* Analytics */
   'elasticmapreduce',
   'kinesis'
 
@@ -55,10 +56,11 @@ PriceGrabber.prototype.requestPricing = function(options) {
   options = options || {};
   var self = this;
 
+  // For each service load and scrape jsonp model paths
   async.each(
-    options.services || _.keys(services),
-    function(serviceName, serviceDone) {
-      var data;
+    options.services,
+    function loadAndScrapePricingPage(serviceName, serviceDone) {
+
       http.get(generatePricingUrl(serviceName), function (res) {
         var pricingHtml;
         res.on('data', function (chunk) {
@@ -74,24 +76,25 @@ PriceGrabber.prototype.requestPricing = function(options) {
            */
           var processModels = pricingHtml.match(/model:\s'\S+'/g);
           if(processModels === null) {
-            console.warn(pricingHtml);
+            serviceDone('No pricing models found for '+serviceName);
           }
 
+          // Load each found jsonp model URL
           async.each(
             processModels,
             function(foundModel,jsonpDone) {
-              var m = foundModel.match(/'(\S+)'/)[1];
-              var metaInfo = parseModelPath(serviceName,m);
+              var metaInfo = parseModelPath(serviceName,foundModel);
 
-              var body = '';
+              var jsonpBody = '';
               var jsonpReq = http.get(metaInfo.jsonpUrl, function (jsonpRes) {
                 jsonpRes.on('data', function (chunk) {
-                  body = body + chunk.toString();
+                  jsonpBody = jsonpBody + chunk.toString();
                 });
+                jsonpRes.on('err', jsonpDone),
                 jsonpRes.on('end', function() {
-                  var json = vm.runInContext(body,self.jsonpSandbox);
+                  var json = vm.runInContext(jsonpBody,self.jsonpSandbox);
                   self.emit('pricemap:received',{
-                    jsonpPath: m,
+                    jsonpPath: metaInfo.modelPath,
                     serviceName: serviceName,
                     productName: metaInfo.productName,
                     rateType: metaInfo.rateType,
@@ -102,7 +105,7 @@ PriceGrabber.prototype.requestPricing = function(options) {
               });
             },
             function(err) {
-              serviceDone();
+              serviceDone(err);
             }
           );
         })
@@ -119,23 +122,38 @@ var generatePricingUrl = function(serviceName) {
   return "http://aws.amazon.com/"+serviceName+"/pricing/";
 };
 
-var parseModelPath = function(serviceName,modelPath) {
+var parseModelPath = function(serviceName,foundModel) {
   /*
-  * //a0.awsstatic.com/pricing/1/ec2/mswin-od.min.js
-  * //a0.awsstatic.com/pricing/1/ec2/ri-v2/linux-unix-shared.min.js
-  * //spot-price.s3.amazonaws.com/spot.js
-  * //a0.awsstatic.com/pricing/1/ec2/pricing-data-transfer-with-regions.min.js
-  * //a0.awsstatic.com/pricing/1/cloudwatch/pricing-cloudwatch.min.js
-  * //a0.awsstatic.com/pricing/1/ec2/pricing-elb.min.js
-  */
+   * //a0.awsstatic.com/pricing/1/ec2/mswin-od.min.js
+   * //a0.awsstatic.com/pricing/1/ec2/ri-v2/linux-unix-shared.min.js
+   * //spot-price.s3.amazonaws.com/spot.js
+   * //a0.awsstatic.com/pricing/1/ec2/pricing-data-transfer-with-regions.min.js
+   * //a0.awsstatic.com/pricing/1/cloudwatch/pricing-cloudwatch.min.js
+   * //a0.awsstatic.com/pricing/1/ec2/pricing-elb.min.js
+   */
 
+  var modelPath = foundModel.match(/'(\S+)'/)[1];
+
+  // Match the name of the model without prepended 'pricing-' or the file extension
   var m = modelPath.match(/(pricing-)?([\w\-]+)(\.\min)?\.js/);
 
+  // The baseName is the 3 element in our match array
   var baseName = m[2];
+
+  // Strip the serviceName ('ec2','rds',etc...) from the name
   baseName = baseName.replace(serviceName+'-','');
+  baseName = baseName.replace('-'+serviceName,'');
 
+
+  /* Build the URL for the jsonp endpoint.
+   *
+   * Most models only provide the path.
+   *
+   * In the event that the full URL exists
+   * ensure that it uses http and not https
+   *
+   */
   var jsonpUrl = modelPath;
-
   if (jsonpUrl.match('http')) {
     jsonpUrl = jsonpUrl.replace('https','http');
   }
@@ -144,7 +162,9 @@ var parseModelPath = function(serviceName,modelPath) {
   }
 
 
+  // return object
   var r = {
+    modelPath: modelPath,
     productName: baseName,
     jsonpUrl: jsonpUrl
   };

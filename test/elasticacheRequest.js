@@ -5,11 +5,11 @@ describe('elasticache Request', function(){
   describe('#pricingRequest()', function(){
     it('should run without error', function(done){
       this.timeout(15000);
-      var f = awsPriceGrabber.requestPricing({services:['elasticache']});
-      f.on('pricemap:received',function(pricemap) {
+      var grabber = awsPriceGrabber.requestPricing({services:['elasticache']});
+      grabber.on('pricemap:received',function(pricemap) {
         assert.equal(pricemap.serviceName, 'elasticache');
       });
-      f.on('end',done);
+      grabber.on('end',done);
     })
   })
 });

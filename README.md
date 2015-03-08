@@ -61,22 +61,25 @@ The following services embed pricing as HTML and do not use jsonp.
     var awsPriceGrabber = require('awsPriceGrabber-ec2');
     var grabber = awsPriceGrabber.requestPricing;
 
+    // grab all services
     grabber.on('pricemap:received',doSomething);
     grabber.on('end',finishSomething);
 
+    // grab specific services
+    var grabber2 = awsPriceGrabber.requestPricing({services:['ec2']});;
+
+
 ## Scripts
-Right now I'm placing some quick scripts in the bin directory.  Will
-most likely move these to examples or better yet, tests in the future.
 
 ### request\_all.js
 Script that dumps all pricing in JSON to STDOUT
 
-    > ./bin/request_all.js
+    > ./scripts/request_all.js
 
 ### count\_price\_endpoints.js
 Counts the total number of jsonp endpoints that can be collected
 
-    > ./bin/count_price_endpoints.js
+    > ./scripts/count_price_endpoints.js
 
 
 

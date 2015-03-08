@@ -4,10 +4,10 @@ var awsPriceGrabber = require('../');
 
 var all = [];
 
-var f = awsPriceGrabber.requestPricing();
-f.on('pricemap:received',function(a){
+var grabber = awsPriceGrabber.requestPricing();
+grabber.on('pricemap:received',function(a){
   all.push(a);
 });
-f.on('end',function() {
+grabber.on('end',function() {
   console.log(JSON.stringify(all,null,2));
 });
