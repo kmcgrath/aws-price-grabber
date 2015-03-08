@@ -2,6 +2,8 @@
 [![Build Status](https://travis-ci.org/kmcgrath/aws-price-grabber.svg?branch=develop)](https://travis-ci.org/kmcgrath/aws-price-grabber)
 [![Code
 Climate](https://codeclimate.com/github/kmcgrath/aws-price-grabber/badges/gpa.svg)](https://codeclimate.com/github/kmcgrath/aws-price-grabber)
+[![Coverage
+Status](https://coveralls.io/repos/kmcgrath/aws-price-grabber/badge.svg?branch=develop)](https://coveralls.io/r/kmcgrath/aws-price-grabber?branch=develop)
 
 Capture AWS pricing as JSON
 
