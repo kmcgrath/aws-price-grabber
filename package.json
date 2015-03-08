@@ -1,6 +1,6 @@
 {
-  "name": "frugal-ec2",
-  "version": "1.0.0",
+  "name": "aws-price-grabber",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
