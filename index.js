@@ -103,7 +103,7 @@ PriceGrabber.prototype.requestPricing = function(options) {
                   jsonpDone();
                 });
               });
-              jsonReq.on('err',function(err) {
+              jsonpReq.on('err',function(err) {
                 jsonpDone(err);
               });
             },
