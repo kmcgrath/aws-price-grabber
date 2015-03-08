@@ -90,7 +90,7 @@ PriceGrabber.prototype.requestPricing = function(options) {
                 jsonpRes.on('data', function (chunk) {
                   jsonpBody = jsonpBody + chunk.toString();
                 });
-                jsonpRes.on('err', jsonpDone),
+                jsonpRes.on('err', jsonpDone);
                 jsonpRes.on('end', function() {
                   var json = vm.runInContext(jsonpBody,self.jsonpSandbox);
                   self.emit('pricemap:received',{
