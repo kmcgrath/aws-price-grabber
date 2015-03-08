@@ -35,11 +35,7 @@ var SERVICE_LIST = [
 
 ];
 
-
-exports.requestPricing = function(options) {
-  return new PriceGrabber(options);
-};
-
+// Constructor
 var PriceGrabber = function(options) {
   options = options || {};
 
@@ -49,6 +45,13 @@ var PriceGrabber = function(options) {
   this.requestPricing(options);
 };
 util.inherits(PriceGrabber, EventEmitter);
+
+
+// exports
+exports.requestPricing = function(options) {
+  return new PriceGrabber(options);
+};
+
 
 PriceGrabber.prototype.requestPricing = function(options) {
   options = options || {};
@@ -62,7 +65,6 @@ PriceGrabber.prototype.requestPricing = function(options) {
       http.get(generatePricingUrl(serviceName), function (res) {
         var pricingHtml;
         res.on('data', function (chunk) {
-          var findModels;
           pricingHtml = pricingHtml + chunk.toString();
         });
         res.on('err', function (err) {
@@ -101,12 +103,15 @@ PriceGrabber.prototype.requestPricing = function(options) {
                   jsonpDone();
                 });
               });
+              jsonReq.on('err',function(err) {
+                jsonpDone(err);
+              });
             },
             function(err) {
               serviceDone(err);
             }
           );
-        })
+        });
       });
     },
     function(err) {
