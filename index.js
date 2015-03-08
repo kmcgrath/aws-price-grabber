@@ -1,7 +1,5 @@
-var _ = require('lodash'),
-EventEmitter = require('events').EventEmitter,
+var EventEmitter = require('events').EventEmitter,
 async = require('async'),
-aws = require('aws-sdk'),
 http = require('http'),
 util = require('util'),
 vm = require('vm');
