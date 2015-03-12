@@ -1,4 +1,6 @@
 # aws-price-grabber
+[![NPM](https://nodei.co/npm/aws-price-grabber.png)](https://nodei.co/npm/aws-price-grabber/)
+
 [![Build Status](https://travis-ci.org/kmcgrath/aws-price-grabber.svg?branch=develop)](https://travis-ci.org/kmcgrath/aws-price-grabber)
 [![Code Climate](https://codeclimate.com/github/kmcgrath/aws-price-grabber/badges/gpa.svg)](https://codeclimate.com/github/kmcgrath/aws-price-grabber)
 [![Coverage Status](https://coveralls.io/repos/kmcgrath/aws-price-grabber/badge.svg?branch=develop)](https://coveralls.io/r/kmcgrath/aws-price-grabber?branch=develop)
@@ -8,11 +10,7 @@ Capture AWS pricing as JSON
 
 Based on a Stack Overflow [answer](http://stackoverflow.com/a/7334197)
 
-*Staus*: ~~Alpha~~ Hacky
-
-*WARNING*
-There is a lot of work to be done.  There are unicorns, gremlins and
-constant change.
+*Staus*: Alpha
 
 ## Description
 AWS does not have an API for pricing.  Most of the pricing pages however
