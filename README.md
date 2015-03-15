@@ -1,4 +1,5 @@
 # aws-price-grabber
+
 [![NPM](https://nodei.co/npm/aws-price-grabber.png)](https://nodei.co/npm/aws-price-grabber/)
 
 [![Build Status](https://travis-ci.org/kmcgrath/aws-price-grabber.svg?branch=develop)](https://travis-ci.org/kmcgrath/aws-price-grabber)
@@ -9,8 +10,6 @@
 Capture AWS pricing as JSON
 
 Based on a Stack Overflow [answer](http://stackoverflow.com/a/7334197)
-
-*Staus*: Alpha
 
 ## Description
 AWS does not have an API for pricing.  Most of the pricing pages however
@@ -62,14 +61,15 @@ The following services embed pricing as HTML and do not use jsonp.
 ## Use
 
     var awsPriceGrabber = require('awsPriceGrabber-ec2');
-    var grabber = awsPriceGrabber.requestPricing;
 
     // grab all services
+    var grabber = awsPriceGrabber.requestPricing;
     grabber.on('pricemap:received',doSomething);
     grabber.on('end',finishSomething);
 
     // grab specific services
     var grabber2 = awsPriceGrabber.requestPricing({services:['ec2']});;
+    ...
 
 
 ## Scripts
