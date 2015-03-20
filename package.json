@@ -8,6 +8,14 @@
   },
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/SungardAS/aws-price-grabber.git"
+  },
+  "bugs": {
+    "url" : "http://github.com/owner/project/issues",
+    "email" : "project@hostname.com"
+  },
   "dependencies": {
     "async": "^0.9.0",
     "lodash": "^3.3.1"
